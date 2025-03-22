@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+        }
+        #weatherInfo {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Live Weather App</h2>
+    <input type="text" id="city" placeholder="Enter city name">
+    <button onclick="getWeather()">Get Weather</button>
+    <div id="weatherInfo"></div>
+
+    <script>
+        function getWeather() {
+            const city = document.getElementById("city").value;
+            const apiKey = "725dc5962f0f2a528a6170dc81dfba73"; 
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.cod === 200) {
+                        document.getElementById("weatherInfo").innerHTML = `
+                            <p><strong>${data.name}, ${data.sys.country}</strong></p>
+                            <p>Temperature: ${data.main.temp}°C</p>
+                            <p>Condition: ${data.weather[0].description}</p>
+                            <p>Humidity: ${data.main.humidity}%</p>
+                        `;
+                    } else {
+                        document.getElementById("weatherInfo").innerHTML = `<p style="color: red;">City not found</p>`;
+                    }
+                })
+                .catch(error => console.log("Error fetching weather data", error));
+        }
+    </script>
+</body>
+</html>
